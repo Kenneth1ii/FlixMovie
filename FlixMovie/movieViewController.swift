@@ -20,7 +20,7 @@ class movieViewController: UIViewController,UITableViewDataSource,UITableViewDel
         super.viewDidLoad()
 
         tableView.dataSource = self
-        tableView.delegate = self
+        tableView.delegate = self   // self as movieView controller class.
         
         // Do any additional setup after loading the view.
         
@@ -51,8 +51,8 @@ class movieViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as! MovieCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as! MovieCell // as! casting,
+                                                                        // ! for unwrapping
         let movie = movies[indexPath.row]
         let title = movie["title"] as! String
         let synopsis = movie["overview"] as! String
@@ -69,14 +69,34 @@ class movieViewController: UIViewController,UITableViewDataSource,UITableViewDel
         return cell
     }
 
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        
+        print("Loading")
+        // Find Movie Selected
+        let cell = sender as! UITableViewCell       // Cast sender as UItabelViewcell. b/c that is the cell
+                                                    //  sender is from the UITablecell in this case.
+        
+        let indexPath = tableView.indexPath(for: cell)! // ! Unwrapping UitableCell to an Int.
+        let movie = movies[indexPath.row]   //access Array which is current movie cell of dictionaries.
+        
+        
+        
+        // pass the move to the movie down to the *moviesdetail view controller*
+        // so it can handle the task from there.
+        // 1 controller = 1 UiViewNavigation
+        
+        let detailsViewController = segue.destination as! MoviesDetailsViewController
+        detailsViewController.movie = movie // The = movie is our movie from this Array. Previous step.
+                                    // movie property from MoviesDetailControll which we just made.
+        
+        
+        tableView.deselectRow(at: indexPath, animated: true)    // deselect highlighted tablecell
+                                                                // done by default
     }
-    */
-
 }
